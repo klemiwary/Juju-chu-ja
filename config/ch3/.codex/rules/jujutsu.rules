@@ -1,0 +1,78 @@
+# .codex/rules/jujutsu.rules
+
+# --- allow ---
+prefix_rule(pattern = ["jj", "status"], decision = "allow")
+prefix_rule(pattern = ["jj", "log"], decision = "allow")
+prefix_rule(pattern = ["jj", "diff"], decision = "allow")
+prefix_rule(pattern = ["jj", "show"], decision = "allow")
+prefix_rule(pattern = ["jj", "file", "list"], decision = "allow")
+prefix_rule(pattern = ["jj", "root"], decision = "allow")
+prefix_rule(pattern = ["jj", "describe"], decision = "allow")
+prefix_rule(pattern = ["jj", "new"], decision = "allow")
+prefix_rule(pattern = ["jj", "edit"], decision = "allow")
+prefix_rule(pattern = ["jj", "restore"], decision = "allow")
+prefix_rule(pattern = ["jj", "squash"], decision = "allow")
+prefix_rule(pattern = ["jj", "rebase"], decision = "allow")
+prefix_rule(pattern = ["jj", "abandon"], decision = "allow")
+prefix_rule(pattern = ["jj", "evolog"], decision = "allow")
+prefix_rule(pattern = ["jj", "op", "log"], decision = "allow")
+prefix_rule(pattern = ["jj", "operation", "log"], decision = "allow")
+prefix_rule(pattern = ["jj", "undo"], decision = "allow")
+prefix_rule(pattern = ["jj", "bookmark", "list"], decision = "allow")
+prefix_rule(pattern = ["jj", "bookmark", "create"], decision = "allow")
+prefix_rule(pattern = ["jj", "bookmark", "move"], decision = "allow")
+prefix_rule(pattern = ["jj", "bookmark", "advance"], decision = "allow")
+prefix_rule(pattern = ["jj", "bookmark", "set"], decision = "allow")
+prefix_rule(pattern = ["jj", "bookmark", "rename"], decision = "allow")
+prefix_rule(pattern = ["jj", "config", "get"], decision = "allow")
+prefix_rule(pattern = ["jj", "config", "list"], decision = "allow")
+prefix_rule(
+    pattern = ["jj", "git", "fetch"],
+    decision = "allow",
+    justification = "Jujutsu の fetch は許可"
+)
+
+# --- deny / forbidden ---
+prefix_rule(
+    pattern = ["git"],
+    decision = "forbidden",
+    justification = "raw git は使わず、jj コマンドを使うこと"
+)
+prefix_rule(
+    pattern = ["jj", "split"],
+    decision = "forbidden",
+    justification = "jj split は手動で行うこと"
+)
+prefix_rule(
+    pattern = ["jj", "resolve"],
+    decision = "forbidden",
+    justification = "conflict は手動で行うこと"
+)
+
+# --- ask / prompt ---
+prefix_rule(
+    pattern = ["jj", "bookmark", "delete"],
+    decision = "prompt",
+    justification = "bookmark 削除は確認必須"
+)
+prefix_rule(
+    pattern = ["jj", "bookmark", "forget"],
+    decision = "prompt",
+    justification = "bookmark forget は確認必須"
+)
+prefix_rule(
+    pattern = ["jj", "bookmark", "track"],
+    decision = "prompt",
+    justification = "remote bookmark の追跡開始は確認必須"
+)
+prefix_rule(
+    pattern = ["jj", "bookmark", "untrack"],
+    decision = "prompt",
+    justification = "remote bookmark の追跡解除は確認必須"
+)
+prefix_rule(
+    pattern = ["jj", "git", "push"],
+    decision = "prompt",
+    justification = "リモートへの push は確認が必要",
+    match = ["jj git push -b feature-x"],
+)
