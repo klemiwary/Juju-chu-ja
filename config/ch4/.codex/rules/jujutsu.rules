@@ -58,6 +58,11 @@ prefix_rule(
     decision = "forbidden",
     justification = "jj arrange は手動で行うこと"
 )
+prefix_rule(
+    pattern = ["jj", "git", "push"],
+    decision = "forbidden",
+    justification = "push は jj push で行うこと"
+)
 
 # --- ask / prompt ---
 prefix_rule(
@@ -81,7 +86,7 @@ prefix_rule(
     justification = "remote bookmark の追跡解除は確認必須"
 )
 prefix_rule(
-    pattern = ["jj", "git", "push"],
+    pattern = ["jj", "push"],
     decision = "prompt",
     justification = "リモートへの push は確認が必要",
     match = ["jj git push -b feature-x"],

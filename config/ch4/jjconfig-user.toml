@@ -1,0 +1,2 @@
+[revsets]
+bookmark-advance-to = "heads(::@ & ~empty())"

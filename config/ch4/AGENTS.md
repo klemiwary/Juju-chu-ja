@@ -60,7 +60,8 @@ conflict があれば、ファイルを直接編集して解消し、再度 `jj 
 
 ## リモート・PR の原則
 
-- リモート同期には `jj git fetch` / `jj git push -b <bookmark-name>` を使う
+- リモート同期には `jj git fetch` / `jj push -b <bookmark-name>` を使う  
+（※ `jj push` は内部で `jj git push` を実行するエイリアスコマンド）
 - PR 作成には `gh pr create --base main --head <bookmark-name>` を使う
 - bookmark は branch と違い、自動では移動しない。必要に応じて明示的に操作すること
 

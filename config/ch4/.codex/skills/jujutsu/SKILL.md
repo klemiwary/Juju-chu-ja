@@ -46,6 +46,7 @@ Git の用語をそのまま持ち込まないこと。
 3. 親を変更すると子孫 change は自動 rebase される
 4. conflict は first-class な状態として記録される
 5. すべての操作は operation log に残るので、必要なら `jj undo` や `jj op restore` で戻せる
+6. **自動整形 (`jj fix`)**: 本プロジェクトでは `jj fix` が導入されている。Stop hooks に登録してあるためタスク完了時に起動し、mutable な change を遡ってコードが整形される。`jj diff` の結果に意図しない整形差分が含まれていても、それがプロジェクトルールに沿ったものであれば許容すること。
 
 ## diff と log の基本方針
 
@@ -101,6 +102,23 @@ jj log --ignore-working-copy
 jj log --ignore-working-copy --no-graph -T 'change_id.short() ++ " " ++ description.first_line() ++ "\n"'
 jj log --ignore-working-copy --no-graph -T 'commit_id.short() ++ " " ++ bookmarks ++ "\n"' -r 'bookmarks()'
 ```
+
+## カスタムコマンドと依存関係
+
+Jujutsu のリポジトリ用設定で、以下ようなのエイリアスが登録されている。
+
+```toml
+[aliases]
+push = [
+  "util", "exec", "--",
+  "bash", "-c",
+  "jj fix && mise run pre-push && jj git push \"$@\"",
+  ""
+]
+```
+
+* **`jj push` の使用**: リモートへ変更を反映する際は、必ずこのエイリアスを使用すること。内部で `jj fix` および  `mise` による `pre-push` タスクが実行される。
+* **依存ツール**: `jj push` の実行には `mise` が必要である。
 
 ## 基本ワークフロー
 
@@ -271,11 +289,12 @@ content from the other side
 
 ```bash
 jj git fetch
-jj git push -b <bookmark-name>
+jj push -b <bookmark-name>
 ```
 
 - `jj git fetch`: リモートの最新状態を取得
-- `jj git push -b <bookmark-name>`: bookmark を push
+- `jj push -b <bookmark-name>`: bookmark を push  
+（※ `jj push` は内部で `jj git push` を実行するエイリアスコマンド）
 
 ## revset チートシート
 
@@ -328,7 +347,7 @@ jj git fetch
 jj log --ignore-working-copy
 jj bookmark list --all --ignore-working-copy
 jj bookmark track <bookmark-name>@origin
-jj git push -b <bookmark-name>
+jj push -b <bookmark-name>
 gh pr create --base main --head <bookmark-name>
 ```
 

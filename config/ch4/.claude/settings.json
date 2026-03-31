@@ -33,14 +33,15 @@
       "Bash(jj split:*)",
       "Bash(jj resolve:*)",
       "Bash(jj diffedit:*)",
-      "Bash(jj arrange:*)"
+      "Bash(jj arrange:*)",
+      "Bash(jj git push:*)"
     ],
     "ask": [
       "Bash(jj bookmark delete:*)",
       "Bash(jj bookmark forget:*)",
       "Bash(jj bookmark track:*)",
       "Bash(jj bookmark untrack:*)",
-      "Bash(jj git push:*)"
+      "Bash(jj push:*)"
     ]
   },
   "hooks": {
