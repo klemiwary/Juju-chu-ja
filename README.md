@@ -27,8 +27,8 @@
 
 本文中に掲載されている設定のソースコードについては、このリポジトリの以下の場所に格納されています。
 
-- 第 3 章に掲載の各種設定： [`./config/ch3/`](/klemiwary/Juju-chu-ja/tree/main/config/ch3)
-- 第 4 章に掲載の各種設定： [`./config/ch4/`](/klemiwary/Juju-chu-ja/tree/main/config/ch4)
+- 第 3 章に掲載の各種設定： [`./config/ch3/`](https://github.com/klemiwary/Juju-chu-ja/tree/main/config/ch3)
+- 第 4 章に掲載の各種設定： [`./config/ch4/`](https://github.com/klemiwary/Juju-chu-ja/tree/main/config/ch4)
 
 <br>
 
