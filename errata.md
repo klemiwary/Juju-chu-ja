@@ -20,6 +20,30 @@
 
 ### 訂正箇所
 
+- 2-2-4. リモートとやりとりする / p.42 / 脚注 32
+
+```diff
+- 32 「jj-git-remote-add - CLI reference - Jujutsu docs」
++ 32 「jj git-remote-add - CLI reference - Jujutsu docs」
+  https://www.jj-vcs.dev/latest/cli-reference/#jj-git-remote-add
+```
+
+- 2-2-4. リモートとやりとりする / p.43 / 脚注 34
+
+```diff
+- 34 「jj-git-push - CLI reference - Jujutsu docs」
++ 34 「jj git push - CLI reference - Jujutsu docs」
+  https://www.jj-vcs.dev/latest/cli-reference/#jj-git-remote-add
+```
+
+- 2-2-4. リモートとやりとりする / p.44 / 脚注 35
+
+```diff
+- 34 「jj-bookmark-list - CLI reference - Jujutsu docs」
++ 34 「jj bookmark list - CLI reference - Jujutsu docs」
+  https://www.jj-vcs.dev/latest/cli-reference/#jj-git-remote-add
+```
+
 - 3-2-1. AI が作成した change の粒度を整える / p.78 / 図内キャプション
 
 ```diff
