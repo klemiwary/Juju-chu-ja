@@ -2,7 +2,7 @@
 
 # 『じゅじゅちゅ！　jj new で始める Jujutsu × AI ワークフロー』第 1 刷の正誤表・更新情報
 
-最終更新日： 2026 年 4 月 8 日
+最終更新日： 2026 年 4 月 13 日
 
 ### ご注意点
 
@@ -44,9 +44,26 @@
   https://www.jj-vcs.dev/latest/cli-reference/#jj-git-remote-add
 ```
 
+- 3-1-3. Hooks で jj fix を走らせる / p.77
+
+```diff
+  内容は jj fix と同じ
+- 対象範囲の対象の
++ 対象範囲の
+  JavaScript / TypeScript ファイルに対して eslint --fix を実行するというもの。
+```
+
 - 3-2-1. AI が作成した change の粒度を整える / p.78 / 図内キャプション
 
 ```diff
 - 図 8: React テンプレートアプリの起動画面
 + 図 8: 作り替えられて ToDo アプリになった画面
+```
+
+- 奥付 / p.147
+
+```diff
+  くるみ割り書房
+- https:\/\/klemiwary.com
++ https://klemiwary.com
 ```
