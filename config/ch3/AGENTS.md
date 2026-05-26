@@ -46,7 +46,7 @@ jj log --ignore-working-copy
 jj diff --git --ignore-working-copy
 jj evolog --ignore-working-copy
 jj op log --ignore-working-copy
-````
+```
 
 **補足説明**: AI エージェント自身がファイルを変更した後にそれを確認する場合を除き、純粋な読み取り操作には `--ignore-working-copy` を付与することを推奨。
 
