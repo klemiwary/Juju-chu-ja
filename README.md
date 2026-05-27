@@ -1,6 +1,6 @@
-# 『じゅじゅちゅ！&nbsp; jj new で始める Jujuts × AI ワークフロー』サポートページ
+# 『じゅじゅちゅ！&nbsp; jj new で始める Jujutsu × AI ワークフロー』サポートページ
 
-このリポジトリは、『じゅじゅちゅ！&nbsp; jj new で始める Jujuts × AI ワークフロー』のサンプルコードおよび正誤表を提供するものです。
+このリポジトリは、『じゅじゅちゅ！&nbsp; jj new で始める Jujutsu × AI ワークフロー』のサンプルコードおよび正誤表を提供するものです。
 
 <img src="./images/jujuchu-covers.png" alt="りあクト！三部作 表紙画像" />
 
@@ -10,7 +10,7 @@
 
 ### 概要
 
-『じゅじゅちゅ！&nbsp; jj new で始める Jujuts × AI ワークフロー』は人気上昇中の新世代 VCS「**[Jujutsu](https://www.jj-vcs.dev/)**」の本格的な入門書です。  
+『じゅじゅちゅ！&nbsp; jj new で始める Jujutsu × AI ワークフロー』は人気上昇中の新世代 VCS「**[Jujutsu](https://www.jj-vcs.dev/)**」の本格的な入門書です。  
 内容は基本的な使い方だけでなく、Git と比較しながらのメンタルモデルの構築や AI エージェントと協働するための Tips、Jujutsu を実際に使っていくときに行き当たりがちな問題の対処法などに渡ります。
 
 この 1 冊ですぐ Jujutsu を始めることができ、AI 支援開発に応用できるようになっています。
