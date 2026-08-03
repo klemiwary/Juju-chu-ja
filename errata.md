@@ -2,7 +2,7 @@
 
 # 『じゅじゅちゅ！　jj new で始める Jujutsu × AI ワークフロー』第 1 刷の正誤表・更新情報
 
-最終更新日： 2026 年 8 月 3 日
+最終更新日： 2026 年 8 月 4 日
 
 ### ご注意点
 
@@ -90,6 +90,17 @@
     skills/
       jujutsu/
         SKILL.md
+```
+
+- 3-2-1. AI が作成した change の粒度を整える / p.77 / コードブロック内
+
+```diff
+  [fix.tools.biome]
+  command = [ "pnpm", "exec", "biome", "check", "--write" ,"--stdin-file-path",
+  "$path" ]
+  patterns = ["glob:'**/*.
+- {js,mjs,cjs,ts,mts,cts,jsx,tsx,html,css,json,jsonc,yaml,yml,md,mdx}'"]
++ {js,mjs,cjs,ts,mts,cts,jsx,tsx,html,css,json,jsonc}'"]
 ```
 
 - 3-2-1. AI が作成した change の粒度を整える / p.78 / 図内キャプション
