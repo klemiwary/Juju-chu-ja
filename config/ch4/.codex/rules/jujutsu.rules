@@ -89,5 +89,5 @@ prefix_rule(
     pattern = ["jj", "push"],
     decision = "prompt",
     justification = "リモートへの push は確認が必要",
-    match = ["jj git push -b feature-x"],
+    match = ["jj push -b feature-x"],
 )
