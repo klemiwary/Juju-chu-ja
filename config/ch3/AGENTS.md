@@ -2,7 +2,7 @@
 
 このリポジトリではバージョン管理に Jujutsu (`jj`) を使う。  
 Git ではなく、常に Jujutsu の概念とコマンドで作業すること。
-詳細な手順については `.codex/skills/jujutsu/SKILL.md` を参照。
+詳細な手順については `.agents/skills/jujutsu/SKILL.md` を参照。
 
 ### 最重要ルール
 

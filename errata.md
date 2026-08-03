@@ -2,7 +2,7 @@
 
 # 『じゅじゅちゅ！　jj new で始める Jujutsu × AI ワークフロー』第 1 刷の正誤表・更新情報
 
-最終更新日： 2026 年 4 月 13 日
+最終更新日： 2026 年 8 月 3 日
 
 ### ご注意点
 
@@ -53,11 +53,64 @@
   JavaScript / TypeScript ファイルに対して eslint --fix を実行するというもの。
 ```
 
+- 3-1-1. AI エージェントに Jujutsu を使わせる / p.67 / コードブロック内
+
+```diff
+  .claude/
+    rules/
+      jujutsu-rules.md ← 該当の rules ファイル
+- .codex/
++ .agents/
+    skills/
+      jujutsu/
+        SKILL.md ← 詳細を skill 化したもの
+```
+
+- 3-1-2. jj コマンドの Permissions 設定 / p.69 / コードブロック内
+
+```diff
+  .codex/
+    rules/
+      jujutsu.rules    ← 実行ルール設定を記述
++ .agents/
+    skills/
+      jujutsu/
+        SKILL.md
+```
+
+- 3-1-3. Hooks で jj fix を走らせる / p.75 / コードブロック内
+
+```diff
+  .codex/
+    config.toml        ← features.codex_hooks を有効にする
+    hooks.json         ← hooks 設定を記述
+    rules/
+      jujutsu.rules
++ .agents/
+    skills/
+      jujutsu/
+        SKILL.md
+```
+
 - 3-2-1. AI が作成した change の粒度を整える / p.78 / 図内キャプション
 
 ```diff
 - 図 8: React テンプレートアプリの起動画面
 + 図 8: 作り替えられて ToDo アプリになった画面
+```
+
+- 4-3. Git Hooks の代替戦術 / p.108 / コードブロック内
+
+```diff
+  .codex/
+    config.toml
+    hooks.json
+    rules/
+      jujutsu.rules    ← rules 設定を変更
++ .agents/
+    skills/
+      jujutsu/
+        SKILL.md
 ```
 
 - 奥付 / p.147
