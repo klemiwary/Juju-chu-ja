@@ -17,9 +17,10 @@
 
 ### 立ち読み用無料サンプル
 
-46 ページ（本書 166 ページ中）の無料でお読みいただけるサンプル PDF を用意しています。ご自由にご覧ください。
+46 ページ（本書 169 ページ中）の無料でお読みいただけるサンプル PDF を用意しています。ご自由にご覧ください。
 
-- [無料サンプル（46 ページ）](./jujuchu-sample.pdf)
+- [無料サンプル（PDF）](./jujuchu-sample.pdf)
+- [無料サンプル（EPUB）](./jujuchu-sample.epub)
 
 <br>
 
@@ -43,7 +44,7 @@
 
 ## ■ 電子版の閲覧について
 
-本書の電子版は **PDF** と **EPUB** の 2 つのファイル形式で提供されています。閲覧の方法については[「よりよい環境で電子版をお読みいただくために」](./ebook-tips.md)をご覧ください。
+本書の電子版は **PDF** と **EPUB**、**KFX** の 3 つのファイル形式で提供されています。閲覧の方法については[「よりよい環境で電子版をお読みいただくために」](./ebook-tips.md)をご覧ください。
 
 <br>
 
@@ -62,7 +63,6 @@
   - 作業ディレクトリが即 commit される
   - あらゆる操作が undo 可能
   - Conflict をただの状態として扱う
-- コラム： Git はバージョン管理の何を革新したのか
 
 #### 第 2 章　使ってみよう Jujutsu
 
@@ -93,7 +93,6 @@
   - 3-2-1. AI が作成した change の粒度を整える
   - 3-2-2. push して PR を作成する
   - 3-2-2. workspace を使った並行開発
-- コラム： Jujutsu に影響を与えたツールたち ①
 
 #### 第 4 章　Jujutsu の高度な術式
 
@@ -105,13 +104,9 @@
   - 4-2-2. `jj arrange`
   - 4-2-3. `jj bookmark advance`
 - 4-3. Git Hooks の代替戦術
-- 4-4. Conflict を半自動的に解決する
-  - 4-4-1. Mergiraf
-  - 4-4-2. Weave
-- 4-5. Jujutsu の UI ツール
-  - 4-5-1. jjui
-  - 4-5-2. JJ View
-- コラム： Jujutsu に影響を与えたツールたち ②
+- 4-4. Jujutsu の UI ツール
+  - 4-4-1. jjui
+  - 4-4-2. JJ View
 
 #### 第 5 章　Jujutsu 問題解決ガイド
 
@@ -132,14 +127,13 @@
     - Jujutsu の作者ってどんな人？
     - プロダクト名の意味は「呪術」「柔術」どっち？
 - 5-2.　トラブルシューティング
-  - ただの push が知らないうちに force push になっている
-  - 『Error: The working copy is stale』という謎のエラーが出る
-  - いつのまにか change に divergent という注釈がついていた
-  - 画像や動画ファイルを Jujutsu が追跡してくれない
-  - PR をマージ後に fetch したら `@` が迷子になる
-  - まだ作業中のリモートの bookmark を GitHub 上から削除してしまった
-  - Claude Code の Permissions 設定で `jj log` を allow にしていても実行許可を求められる
-- コラム： JJ ネイティブのホスティングサービスが欲しい！
+  - ● ただの push が知らないうちに force push になっている
+  - ● 『Error: The working copy is stale』という謎のエラーが出る
+  - ● いつのまにか change に divergent という注釈がついていた
+  - ● 画像や動画ファイルを Jujutsu が追跡してくれない
+  - ● PR をマージ後に fetch したら `@` が迷子になる
+  - ● まだ作業中のリモートの bookmark を GitHub 上から削除してしまった
+  - ● Claude Code の Permissions 設定で `jj log` を allow にしていても実行許可を求められる
 
 ---
 

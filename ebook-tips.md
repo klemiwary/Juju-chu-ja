@@ -2,9 +2,9 @@
 
 # よりよい環境で「じゅじゅちゅ！」電子版をお読みいただくために
 
-最終更新日： 2026 年 4 月 8 日
+最終更新日： 2026 年 8 月 20 日
 
-『じゅじゅちゅ！&nbsp; jj new で始める Jujuts × AI ワークフロー』の電子版では、**PDF** と **EPUB**、**AZW3**（Kindle 端末用）の 3 つの形式のファイルを提供しています。このドキュメントをお読みになり、それぞれの特徴を知った上で、ご自身の環境に最適な方法でお読みください。
+『じゅじゅちゅ！&nbsp; jj new で始める Jujuts × AI ワークフロー』の電子版では、**PDF** と **EPUB**、**KFX**（Kindle 端末用）の 3 つの形式のファイルを提供しています。このドキュメントをお読みになり、それぞれの特徴を知った上で、ご自身の環境に最適な方法でお読みください。
 
 <br />
 
@@ -20,10 +20,9 @@
   - [3. Mac で EPUB を読む](#epub-mac)
   - [4. Windows で EPUB を読む](#epub-win)
   - [5. Linux で EPUB を読む](#epub-linux)
-- [AZW3](#azw3)
-  - [AZW3 ファイル事情](#azw3-file)
-  - [AZW3 フォント事情](#azw3-font)
-  - [AZW3 にまつわる Kindle のバグ](#azw3-bug)
+- [KFX](#KFX)
+  - [KFX ファイル事情](#KFX-file)
+  - [KFX フォント事情](#KFX-font)
 
 <br />
 <a id="pdf"></a>
@@ -233,30 +232,18 @@ Windows 版と同様、付属の E-book viewer の使い勝手がいいです。
 ☞ [Thorium Reader のダウンロードページ](https://www.edrlab.org/software/thorium-reader/)
 
 <br />
-<a id="azw3"></a>
+<a id="KFX"></a>
 
-## ■ AZW3（Kindle 用）
+## ■ KFX（Kindle 用）
 
-e-ink スクリーンを採用している、Kindle Paperwhite を始めとした Amazon による電子書籍リーダー専用デバイスで本書を読みたい場合はこの AZW3 フォーマットファイルをお使いください。
+e-ink スクリーンを採用している、Kindle Paperwhite を始めとした Amazon による電子書籍リーダー専用デバイスで本書を読みたい場合はこの KFX フォーマットのファイルをご利用ください。
 
-Amazon がパーソナルドキュメントを Kindle 端末に転送する方法として EPUB ファイルを指定のメールアドレスに送信することが推奨されていますが、この方法では CSS が勝手に書き換えられて非常に読みづらいフォーマットになってしまいます。くるみ割り書房では提供されている AZW3 ファイルを USB 接続によって転送する方法を強く推奨します。
+Amazon がパーソナルドキュメントを Kindle 端末に転送する方法として EPUB ファイルを指定のメールアドレスに送信することが推奨されていますが、この方法では CSS が勝手に書き換えられて非常に読みづらいフォーマットになってしまいます。くるみ割り書房では提供されている KFX ファイルを USB 接続によって転送する方法を強く推奨します。
 
-お手持ちの Kindle 端末に AZW3 ファイルを読み込ませるためには、USB ケーブルで PC に接続してストレージとして Kindle 端末をマウントし、ルートにある `documents` フォルダにファイルをコピーしてください。
+お手持ちの Kindle 端末に KFX ファイルを読み込ませるためには、USB ケーブルで PC に接続してストレージとして Kindle 端末をマウントし、ルートにある `documents/` フォルダにファイルをコピーしてください。
 
-なお本書で提供している AZW3 ファイルは、実機で検証を繰り返して Kindle 端末に最適化したスタイルを適用したものとなっています。
+<a id="KFX-file"></a>
 
-<a id="azw3-file"></a>
+#### ◎ KFX ファイル事情
 
-#### ◎ AZW3 ファイル事情
-
-BOOTH ではダウンロード商品に `.azw3` 拡張子のファイルを登録できないため、一度 ZIP 圧縮したものを `jujuchu-YYMMDD.azw3.zip` のファイル名で登録しています。これを解凍すると `jujuchu[123]-YYMMDD.azw3` という形式のファイルができますので、それを Kindle 端末に転送してください。
-
-<a id="azw3-font"></a>
-
-#### ◎ AZW3 にまつわる Kindle のバグ
-
-2026 年 4 月現在、Kindle 端末はパーソナルドキュメントとして転送された AZW3 形式のドキュメントでも表紙画像をファイル中に設定されたものを無視してサーバから取得しようとし、失敗して表紙画像を表示できなくなるというバグがあります。2020 年 5 月ごろに配信されたバージョンのファームウェアから存在しているバグですが、一向に修正される気配がなくそのままになっています。Amazon によるこのバグのため、上記の方法で Kindle 端末に転送したドキュメントには、一覧から表紙画像が表示されません。ご承知おきください。
-
-【参照記事】
-
-- [Covers for books I send to my e-ink Kindle show up momentarily and then are replaced by a generic cover? - Frequently Asked Questions - calibre](https://manual.calibre-ebook.com/faq.html#covers-for-books-i-send-to-my-e-ink-kindle-show-up-momentarily-and-then-are-replaced-by-a-generic-cover)
+BOOTH ではダウンロード商品に `.kfx` 拡張子のファイルを登録できないため、一度 ZIP 圧縮したものを `jujuchu-yymmdd.kfx.zip` のファイル名で登録しています。これを解凍すると `jujuchu-yymmdd.kfx` という形式のファイルができますので、それを Kindle 端末に転送してください。
