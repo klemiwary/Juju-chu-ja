@@ -39,11 +39,6 @@ prefix_rule(
     justification = "raw git は使わず、jj コマンドを使うこと"
 )
 prefix_rule(
-    pattern = ["jj", "split"],
-    decision = "forbidden",
-    justification = "jj split は手動で行うこと"
-)
-prefix_rule(
     pattern = ["jj", "resolve"],
     decision = "forbidden",
     justification = "conflict は手動で行うこと"

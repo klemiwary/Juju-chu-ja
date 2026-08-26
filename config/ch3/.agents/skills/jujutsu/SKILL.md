@@ -1,371 +1,88 @@
 ---
 name: jujutsu
-description: この Skill は、このプロジェクトで AI エージェントがバージョン管理システムとして Jujutsu (`jj`) を安全かつ一貫して使うための詳細手順をまとめたもの。 常設ルールは `AGENTS.md` にあり、この Skill には具体的な操作手順と判断基準を記す。
+description: 複雑な revset、conflict、bookmark、履歴の書き換えや復旧、リモートとの同期、PR の作成など、単純ではない Jujutsu 操作に関する、このリポジトリ固有の手順。
 ---
 
-# Jujutsu 運用スキル
+# Jujutsu の操作
 
-## この Skill を使う場面
+常時適用される方針は `AGENTS.md` に記載している。この Skill では、標準的な Jujutsu の挙動からは導けない、このリポジトリ固有の判断基準と手順のみを扱う。
 
-- 現在の作業状態や履歴を確認したい
-- 新しい change を始めたい
-- rebase / squash / split / restore を行いたい
-- conflict を解決したい
-- bookmark を作成・移動・削除したい
-- revset で対象を指定したい
-- PR を作成したい
-- stale / immutable などのエラーに対処したい
+## この Skill を使用する場面
 
-## 前提
+- 単純ではない revset の記述や評価
+- conflict の解消
+- bookmark の作成、移動、追跡、追跡解除、削除
+- rebase、squash、restore、abandon、undo、操作の復元
+- diff エディタを使わない change の分割
+- stale working copy や immutable revision のエラーへの対処
+- fetch、push、PR の作成
 
-このプロジェクトでは VCS として Jujutsu を使う。
+通常の状態確認や一般的な作業の開始には、この Skill は必要ない。`AGENTS.md` に直接従うこと。
 
-- raw `git` コマンドは原則使用禁止
-- 例外は `jj git ...` と `gh` CLI
-- 読み取り専用の `git log` なども使わず、`jj` コマンドで代替する
+## リポジトリ固有の制約
 
-## 用語のマッピング
+- `git` コマンドを直接実行してはならない。ただし `jj git ...` と `gh` は使用してよい。
+- `jj resolve`、`jj diffedit`、`jj arrange` を実行してはならない。これらは対話型インターフェースを必要とする。`jj split` は fileset と `-m` を渡す形式に限り使用してよい。引数なしでの実行、`-i` と `--tool` の指定は禁止（「ファイル単位で change を分割する」を参照）。非対話型コマンドで安全に完了できない作業については、その部分をユーザーに実行してもらうこと。
+- `jj diff`、`jj show`、`jj log -p` には、必ず `--git` を付ける。
+- `jj new`、`jj rebase`、`jj squash`、`jj restore`、`jj abandon` など、履歴を変更する操作を行った後は、作業を続ける前に `jj status` を実行する。
+- PR の準備時に stacked change を squash してはならない。
 
-Git の用語をそのまま持ち込まないこと。
+# 自動フォーマット
 
-| Git 用語 | Jujutsu での扱い |
-| --- | --- |
-| commit（作業単位） | change |
-| branch | bookmark |
-| HEAD | `@`（working copy） |
-| staging | その概念はない |
-| unstaged / uncommitted | その概念はない |
-| stash | 基本的に不要。必要なら `jj new` |
-| `git add` | 不要 |
-| `git commit --amend` | 不要 |
+`.codex/hooks.json` の Stop hook は、タスクの終了時に `jj fix` を実行する。これにより、複数の可変 change にまたがるファイルが遡及的にフォーマットされることがある。フォーマットによる差分だけであり、リポジトリのフォーマット規則に適合している場合は、その差分を受け入れること。
 
-### 重要な考え方
+## スナップショットの規律
 
-1. ファイルを保存した時点で変更は現在の change に含まれる
-2. change は作業単位であり、revision はそのスナップショット
-3. 親を変更すると子孫 change は自動 rebase される
-4. conflict は first-class な状態として記録される
-5. すべての操作は operation log に残るので、必要なら `jj undo` や `jj op restore` で戻せる
+`--ignore-working-copy` を参照専用の確認、すなわち `jj log`、`jj diff`、`jj bookmark list`、`jj evolog`、`jj op log` に付けてよいのは、作業コピーがすでにスナップショット済みだと確認できている場合に限る。このオプションは新しいスナップショットの作成を抑止するため、古い状態を返す可能性がある。
 
-## diff と log の基本方針
+作業の開始時、およびファイルを作成、編集、削除した直後には付けないこと。そこはまさに最新のファイルシステムの状態を取り込むべき場面である。
 
-### diff
-
-`jj diff` / `jj show` / `jj log -p` では、常に `--git` を付けること。
+## ファイル単位で change を分割する
 
 ```bash
-jj diff --git
-jj diff --git -r @-
-jj show --git
-jj log -p --git
+jj split -m "<切り出す change の description>" <path>...
 ```
 
-禁止例:
+diff エディタを開かせないのは fileset、テキストエディタを開かせないのは `-m` である。hunk 単位の分割にはそのエディタが必要なので、ユーザーに委ねること。
+
+## conflict を解消する
+
+conflict マーカーを直接編集して意図した最終内容にし、`jj status` で conflict が残っていないことを確認する。ファイルを保存すること自体が解消である。`jj resolve` を実行してはならず、編集後に `git add` 相当の操作も要らない。
+
+## 公開する revision に bookmark を配置する
+
+通常の実装中に bookmark を移動してはならない。ユーザーから push または PR の作成を依頼された場合にのみ、bookmark を配置する。PR の作成依頼に push が暗黙的に含まれる場合も同様である。
+
+`@` が公開対象の revision だと決めつけてはならない。`jj new` の実行後は空の change である可能性がある。`@` の祖先のうち内容と description の両方を持つ最新の revision を対象とし、bookmark を配置する前に出力結果を確認すること。
 
 ```bash
-jj diff
-jj diff -r @-
-jj show
-jj log -p
-```
+jj log --ignore-working-copy --no-graph \
+  -r 'heads(::@ & ~empty() & ~description(exact:""))' \
+  -T 'change_id.short() ++ " " ++ description.first_line() ++ "\n"'
 
-### 読み取り専用操作でのスナップショット抑止
-
-jj はコマンド実行のたびに作業コピーのスナップショットを自動作成する。AI が不用意に状態確認を行うと、他のプロセスでの操作によって operation log の競合が起きるリスクがあるため、**ファイルを変更していない状態**での純粋な読み取り操作には `--ignore-working-copy` を付与すること。
-
-```bash
-# ✅ 読み取り専用：ファイル変更を伴わない調査時
-jj log --ignore-working-copy
-jj log --ignore-working-copy -r 'main..@'
-jj diff --git --ignore-working-copy -r @-
-jj bookmark list --ignore-working-copy
-
-# ❌ 付けてはいけない場面：ファイル変更直後の状態確認
-#    （最新のスナップショットを反映させる必要があるため）
-jj status          # 変更直後は --ignore-working-copy を付けない
-jj diff --git      # 変更直後は --ignore-working-copy を付けない
-
-# ℹ️ スナップショットだけを取りたい場合
-jj util snapshot
-```
-
-**判断基準**: 直前にファイルの作成・編集・削除を行った場合は `--ignore-working-copy` を付けない。それ以外の「既知の状態を確認するだけ」の場面では付与する。
-
-### log
-
-通常の確認ではグラフ付きの `jj log` を使う。
-機械的に抽出したいときだけ `--no-graph` と `-T` を使う。
-
-```bash
-jj log --ignore-working-copy
-jj log --ignore-working-copy --no-graph -T 'change_id.short() ++ " " ++ description.first_line() ++ "\n"'
-jj log --ignore-working-copy --no-graph -T 'commit_id.short() ++ " " ++ bookmarks ++ "\n"' -r 'bookmarks()'
-```
-
-## 基本ワークフロー
-
-### 1. 状態確認
-
-```bash
-jj status
-jj log --ignore-working-copy
-jj diff --git
-jj diff --git --ignore-working-copy -r @-
-jj evolog --ignore-working-copy
-jj op log --ignore-working-copy
-```
-
-用途:
-
-- `jj status`: working copy の状態確認
-- `jj log --ignore-working-copy`: 履歴とスタック構造の把握
-- `jj diff --git`: 現在の差分確認（変更直後）
-- `jj diff --git --ignore-working-copy -r @-`: 一つ前の change の差分確認（読み取り専用）
-- `jj evolog --ignore-working-copy`: 現在の change の変遷確認
-- `jj op log --ignore-working-copy`: 操作履歴の確認
-
-### 2. 作業の開始
-
-現在の `@` の状態を見て、`describe` にするか `new` にするかを決める。
-
-手順:
-
-1. `jj log --ignore-working-copy -r @` で現在の change を確認する
-2. description が空で、かつ diff も空なら、その `@` を使って作業開始する
-3. その場合は `jj describe -m "<description>"` を使う
-4. すでに作業中、または description / diff があるなら `jj new -m "<description>"` を使う
-5. description は Conventional Commits 形式に従い、英語で記述する
-
-例:
-
-```bash
-jj log --ignore-working-copy -r @
-jj describe -m "feat: add search form"
-```
-
-または:
-
-```bash
-jj new -m "fix: handle empty input"
-```
-
-### 3. 変更操作後の conflict 確認
-
-`jj rebase`、`jj new`、`jj squash` などの変更操作の直後は、必ず `jj status` を実行すること。
-
-```bash
-jj rebase -s @ -d main
+jj bookmark create <name> -r 'heads(::@ & ~empty() & ~description(exact:""))'
+jj bookmark move <name> --to 'heads(::@ & ~empty() & ~description(exact:""))'
 jj status
 ```
 
-`jj` は conflict が起きても操作を止めない。
-そのため、`jj status` を見ずに先へ進むと conflict を抱えたまま作業を続けてしまう危険がある。
+新しい bookmark には `create`、既存の bookmark には `move` を使用する。`jj bookmark advance` は使用せず、呼び出し箇所で対象 revision を明示する。
 
-conflict の兆候の例:
+## リモートおよび PR のワークフロー
 
-```text
-The change has 2 conflicts:
-  src/main.rs    2-sided conflict
-```
-
-### 4. bookmark 操作
-
-bookmark は Git の branch と違い、自動では動かない。必要なら明示的に操作する。
-
-```bash
-jj bookmark create <name> -r @
-jj bookmark move <name> -t @
-jj bookmark list --ignore-working-copy
-jj bookmark delete <name>
-```
-
-用途:
-
-- 新しい bookmark を作る
-- 既存 bookmark を現在の change に移す
-- 一覧を確認する
-- 不要な bookmark を削除する
-
-### 5. change の分割・復元
-
-#### 分割
-
-change が大きくなりすぎたときは分割する。
-
-```bash
-jj split -r <revision>
-```
-
-#### 復元
-
-別の revision の状態を一部取り戻したいときは `restore` を使う。
-
-```bash
-jj restore --from <revision> <path>
-```
-
-#### 過去バージョンへの復元
-
-`evolog` を見て、同じ change の過去状態へ戻すこともできる。
-
-```bash
-jj evolog --ignore-working-copy -r <change-id>
-jj restore --from <change-id>/1 --to <change-id>
-```
-
-補足:
-
-- `<change-id>/0` は最新版
-- `<change-id>/1` は一つ前の版
-- 実行前に `jj evolog` で確認すること
-
-### 6. 履歴の修正・取り消し
-
-```bash
-jj undo
-jj op restore <operation-id>
-jj abandon @
-```
-
-用途:
-
-- `jj undo`: 直前の操作を取り消す
-- `jj op restore <operation-id>`: 任意の操作時点に戻す
-- `jj abandon @`: 現在の change を破棄する
-
-失敗を恐れず操作してよいが、意図が曖昧なときは `jj op log` で確認してから戻す。
-
-## conflict 解決
-
-Jujutsu では conflict が発生しても、その状態のまま change が記録される。
-解決は次の手順で行う。
-
-1. `jj status` で conflict 対象ファイルを確認する
-2. ファイルを開き、conflict マーカーを含む箇所を直接編集する
-3. 正しい内容に整えて保存する
-4. `jj status` で conflict が消えたことを確認する
-
-conflict マーカーの形式:
-
-```text
-<<<<<<<
-%%%%%%%
--removed line
-+added line
-+++++++
-content from the other side
->>>>>>>
-```
-
-意味:
-
-- `%%%%%%%` ブロック: ベースからの差分
-- `+++++++` ブロック: もう一方の内容そのもの
-
-注意:
-
-- Git のような `git add` は不要
-- 保存すれば `jj` が自動的に解消を検知する
-
-## リモートとの同期
-
-```bash
-jj git fetch
-jj git push -b <bookmark-name>
-```
-
-- `jj git fetch`: リモートの最新状態を取得
-- `jj git push -b <bookmark-name>`: bookmark を push
-
-## revset チートシート
-
-### 基本記法
-
-| 記法                  | 意味                       |
-| ------------------- | ------------------------ |
-| `@`                 | 現在の change               |
-| `@-`                | 1つ前の change              |
-| `@--`               | 2つ前の change              |
-| `<bookmark>`        | bookmark 名               |
-| `<bookmark>@origin` | リモートの bookmark           |
-| `main..@`           | `main` から現在までの change 集合 |
-| `empty()`           | 空の change                |
-| `<change-id>/n`     | 同じ change の n 世代前の版      |
-
-### 便利なパターン
-
-| パターン                                | 用途                  |
-| ----------------------------------- | ------------------- |
-| `trunk()..@`                        | main から現在までのスタック全体  |
-| `mine() & mutable() & ~empty()`     | 自分の作業中の change 一覧   |
-| `conflict()`                        | conflict を含む change |
-| `bookmarks() & ~remote_bookmarks()` | 未 push の bookmark   |
-
-例:
-
-```bash
-jj log -r 'trunk()..@'
-jj log -r 'conflict()'
-jj log -r 'mine() & mutable() & ~empty()'
-```
-
-## PR 作成ワークフロー
-
-### 基本ルール
-
-- 特に指示がない限り、PR のベースは `main`
-- 複数 change を squash してはならない
-- 次のことは毎回確認しなくてよい
-
-  * 変更を含めるか → 常に現在の change に含まれている
-  * `main` をベースにするか → 明示がなければ `main`
-  * squash するか → しない
-
-### 手順
+特に指示がない限り、PR のベースには `main` を使用し、stack 内の各 change を維持する。remote bookmark が未追跡なら `jj bookmark track <name>@origin` で追跡を開始し、local と remote が一致していれば push は不要。PR タイトルは Conventional Commits 形式で明示的に渡し、本文は日本語で書く。
 
 ```bash
 jj git fetch
 jj log --ignore-working-copy
-jj bookmark list --all --ignore-working-copy
-jj bookmark track <bookmark-name>@origin
-jj git push -b <bookmark-name>
-gh pr create --base main --head <bookmark-name>
+jj bookmark list --all --ignore-working-copy   # 確認後、前述の手順で配置する
+jj git push -b <name>
+gh pr create --base main --head <name> --title "<type>: <summary>" --body "<body>"
 ```
 
-補足:
+## 復旧とトラブルシューティング
 
-- 先に bookmark の有無を確認する
-- 未追跡なら `track` する
-- `jj log` や `bookmark list --all` から判断して、ローカルとリモートの bookmark が指す revision が一致していればすでに push 済みなので、再 push は不要
+`jj undo`、`jj op restore`、`jj restore`、`jj abandon` を実行する前に、影響を受ける操作または revision を確認し、それが意図した対象と正確に一致することを確かめる。対象を推測したまま、ユーザーの作業を破棄したり書き換えたりしてはならない。
 
-## トラブルシューティング
+**stale working copy** — `jj workspace update-stale` を実行し、続けて `jj status` で確認する。
 
-### 「The working copy is stale」
-
-人間と AI が並行して同じリポジトリを触った場合や、外部ツールがファイルを書き換えた場合に起こる。
-
-対処:
-
-```bash
-jj workspace update-stale
-jj status
-```
-
-### 「Commit XXXX is immutable」
-
-`describe` や `squash` の対象が `main@origin` やその祖先など、immutable な revision に含まれている。
-
-対処:
-
-1. `-r` で指定した対象が正しいか確認する
-2. mutable な change を対象にやり直す
-3. 必要なら `jj log` で現在位置を確認する
-
-## 最後の注意事項
-
-1. `jj` には staging の概念がない
-2. 作業ディレクトリの変更は自動追跡される
-3. 変更操作後の `jj status` は必須
-4. `.git` と共存できるが、操作は `jj` 経由で行う
-5. `git` コマンドは状態を壊すリスクがあるため原則使わない
-6. 迷ったら `jj log` / `jj status` / `jj op log` を見てから動く
+**immutable revision** — immutability を迂回してはならない。対象 revision を確認し、意図した可変 change を選んで、その change 上で操作をやり直す。
