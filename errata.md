@@ -53,7 +53,7 @@
   JavaScript / TypeScript ファイルに対して eslint --fix を実行するというもの。
 ```
 
-- 3-1-1. AI エージェントに Jujutsu を使わせる / p.67 / コードブロック内
+- **3-1-1. AI エージェントに Jujutsu を使わせる / p.67 / コードブロック内**
 
 ```diff
   .claude/
@@ -66,7 +66,7 @@
         SKILL.md ← 詳細を skill 化したもの
 ```
 
-- 3-1-2. jj コマンドの Permissions 設定 / p.69 / コードブロック内
+- **3-1-2. jj コマンドの Permissions 設定 / p.69 / コードブロック内**
 
 ```diff
   .codex/
@@ -78,7 +78,7 @@
         SKILL.md
 ```
 
-- 3-1-3. Hooks で jj fix を走らせる / p.75 / コードブロック内
+- **3-1-3. Hooks で jj fix を走らせる / p.75 / コードブロック内**
 
 ```diff
   .codex/
@@ -92,7 +92,20 @@
         SKILL.md
 ```
 
-- 3-2-1. AI が作成した change の粒度を整える / p.77 / コードブロック内
+- **3-1-3. Hooks で jj fix を走らせる / p.76 / コードブロック内**
+
+```diff
+  [aliases]
+  lint = ["util", "exec", "--", "sh", "-c", """
+  set -e
+
+- files=$(jj diff -r 'reachable(@, mutable())' --name-only)
++ files=$(jj diff -r 'reachable(@, mutable())' --name-only |
++     while IFS= read -r f; do if [ -f "$f" ]; then printf '%s\\n' "$f"; fi; done)
+  js_files=$(echo "$files" | grep -E '\\.(js|mjs|cjs|ts|mts|cts|jsx|tsx)$' || true)
+```
+
+- **3-2-1. AI が作成した change の粒度を整える / p.77 / コードブロック内**
 
 ```diff
   [fix.tools.biome]
@@ -110,7 +123,7 @@
 + 図 8: 作り替えられて ToDo アプリになった画面
 ```
 
-- 4-3. Git Hooks の代替戦術 / p.108 / コードブロック内
+- **4-3. Git Hooks の代替戦術 / p.108 / コードブロック内**
 
 ```diff
   .codex/
