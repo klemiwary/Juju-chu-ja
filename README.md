@@ -141,7 +141,6 @@
   - 画像や動画ファイルを Jujutsu が追跡してくれない
   - PR をマージ後に fetch したら `@` が迷子になる
   - まだ作業中のリモートの bookmark を GitHub 上から削除してしまった
-  - Claude Code の Permissions 設定で `jj log` を allow にしていても実行許可を求められる
 - ※ コラム： JJ ネイティブのホスティングサービスが欲しい！
 
 ---
